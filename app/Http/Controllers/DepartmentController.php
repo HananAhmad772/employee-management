@@ -12,7 +12,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        return Department::all();
     }
 
     /**
@@ -28,7 +28,13 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|unique:departments,code',
+            'description' => 'nullable|string',
+        ]);
+
+        return Department::create($request->all());
     }
 
     /**
@@ -36,7 +42,7 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        return $department;
     }
 
     /**
@@ -52,7 +58,15 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|unique:departments,code,' . $department->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $department->update($request->all());
+
+        return $department;
     }
 
     /**
@@ -60,6 +74,8 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        return response()->json(['message' => 'Department deleted successfully']);
     }
 }
