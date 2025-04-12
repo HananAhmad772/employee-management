@@ -25,6 +25,7 @@ public function register(Request $request)
     ]);
 
     $token = $user->createToken('auth_token')->plainTextToken;
+    $user->assignRole('employee'); // Default role
 
     return response()->json([
         'message' => 'Registered successfully',
